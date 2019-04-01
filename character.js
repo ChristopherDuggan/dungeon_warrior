@@ -8,6 +8,6 @@ class Character {
   }
 }
 
-let testChar = new Character (1, {strength: 1, agility: 1, toughness: 1}, {attack: 1, block: 1, dodge: 1}, 50, ['sword'])
-
+let testChar = new Character (0, {strength: 1, agility: 1, toughness: 1}, {attack: 1, block: 1, dodge: 1}, 50, [{type: 'weapon', name: 'stick', damage: 1}, {type: 'potion', name: 'hp', damage: -9}])
+testChar.xp = 0
 console.log(testChar)
