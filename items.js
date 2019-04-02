@@ -1,17 +1,19 @@
-const rawRoll = (dice) => {
-  let rawArr = [];
+
+const d10 = (dice) => {
+  let d10Arr = [];
   for (let i = 0; i < (dice || 1); i++) {
-    rawArr.push((Math.ceil(Math.random() * 10)))
+    d10Arr.push((Math.ceil(Math.random() * 10)))
   }
-  // console.log(`rawArr: [${rawArr}]`);
-  return rawArr;
+  // console.log(`d10Arr: [${d10Arr}]`);
+  return d10Arr;
 }
 const sumRoll = (dice) => {
-  return rawRoll(dice).reduce(function(total, num){
+  return d10(dice).reduce(function(total, num){
     return total + num;
   });
 }
 
+d10(5)
 
 class Item {
   constructor(type, name) {
@@ -62,9 +64,7 @@ class HealthPotion extends Item {
 //   this.damage = -18;
 //   break;
 
-const healthPotionSmall = new HealthPotion(sumRoll())
-const healthPotionMedium = new HealthPotion(sumRoll(2))
-const healthPotionLarge = new HealthPotion(sumRoll(4))
-const healthPotionMax = new HealthPotion(sumRoll(20));
-
-console.log(healthPotionMax);
+// const healthPotionSmall = new HealthPotion(sumRoll())
+// const healthPotionMedium = new HealthPotion(sumRoll(2))
+// const healthPotionLarge = new HealthPotion(sumRoll(4))
+// const healthPotionMax = new HealthPotion(sumRoll(20));
