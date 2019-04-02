@@ -1,7 +1,5 @@
 1. Add all methods to the character class:
-  -equipment slots
   -inventory
-    --display inventory
     --use potion
     --equip item
   -attack

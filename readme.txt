@@ -1,4 +1,4 @@
-DUNGEON WARRIOR
+#DUNGEON WARRIOR
 
 Dungeon Warrior is a dungeon crawling adventure/rpg with turn based combat. Each level is a 10 x 10 grid, initially obscured from the player except for the squares immediately adjacent to their character. As they move through the level, more squares will be revealed and they will encounter baddies and loot.
 
@@ -16,4 +16,4 @@ Attack - The character tries to hit their opponent. Chance to hit is based on Ag
 Dodge - The character tries to dodge an incoming Attack. Based on Agility and Dodge.
 Block - The character tries to reduce the damage of an attack once they've been hit. Based on Toughness and Block.
 Run - The character tries to escape from combat. Based on Agility.
-Inventory - The character spends an action to use something that's in their inventory. 
+Inventory - The character spends an action to use something that's in their inventory.
