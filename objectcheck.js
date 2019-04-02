@@ -1,6 +1,5 @@
 class HealthPotion {
   constructor(size){
-    this.type = 'health potion'
     this.size = size;
     switch (size) {
       case 'MAX':
@@ -18,15 +17,5 @@ class HealthPotion {
     }
   }
 }
-const healthPotSm = new HealthPotion('SM')
-const healthPotMed = new HealthPotion('MED')
-const healthPotLrg = new HealthPotion('LRG')
-const healthPotMax = new HealthPotion('MAX')
-
-const isHPotion = a => a.type === 'health potion';
-
-let x = {
-  inventory: ['sword', healthPotMax],
-  currentHp: 10,
-  maxHp: 100
-}
+const smallHP = new HealthPotion('MAX')
+console.log(smallHP);

@@ -1,0 +1,15 @@
+1. Add all methods to the character class:
+  -equipment slots
+  -inventory
+    --display inventory
+    --use potion
+    --equip item
+  -attack
+  -dodge
+  -block
+  -run
+  -death
+    --for char: game end/reset
+    --for baddies: loot drop
+      ---xp exchange
+      ---loot drop chances
