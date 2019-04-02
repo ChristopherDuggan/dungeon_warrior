@@ -1,3 +1,18 @@
+const rawRoll = (dice) => {
+  let rawArr = [];
+  for (let i = 0; i < (dice || 1); i++) {
+    rawArr.push((Math.ceil(Math.random() * 10)))
+  }
+  // console.log(`rawArr: [${rawArr}]`);
+  return rawArr;
+}
+const sumRoll = (dice) => {
+  return rawRoll(dice).reduce(function(total, num){
+    return total + num;
+  });
+}
+
+
 class Item {
   constructor(type, name) {
     this.type = type;
@@ -5,31 +20,51 @@ class Item {
   }
 }
 
+// class Weapon extends Item {
+//   super()
+// }
+
 class HealthPotion extends Item {
-  constructor(size){
+  constructor(heals){
     super()
+    this.heals = heals;
     this.type = 'health potion';
-    this.size = size;
-    switch (size) {
-      case 'maximum':
-        this.damage = -999;
-        break;
-      case 'large':
-        this.damage = -36;
-        break;
-      case 'medium':
-        this.damage = -18;
-        break;
-      default:
-        this.size = 'small'
-        this.damage = -9;
+    this.size = 'small'
+    if (this.heals < 5) {
+      this.heals = 5;
     }
-    this.name = `${this.size} ${this.type}`
-    this.heals = -this.damage + 'hp';
+    if (this.heals > 10) {
+      this.size = 'medium';
+    }
+    if (this.heals > 20) {
+      this.size = 'large';
+    }
+    if (this.heals > 40) {
+      this.size = 'mega'
+    }
+    if (this.heals > 80) {
+      this.size = 'maximum'
+    }
+    this.name = this.size + ' ' + this.type;
   }
 }
 
-const healthPotionSmall = new HealthPotion ('small')
-const healthPotionMedium = new HealthPotion ('medium')
-const healthPotionLarge = new HealthPotion ('large')
-const healthPotionMax = new HealthPotion ('maximum')
+// case < 999:
+//   this.size = 'maximum'
+//   this.damage = -999;
+//   break;
+// case heals > :
+//   this.size = 'large'
+//   this.damage = -36;
+//   break;
+// case heals > 10:
+//   this.size = 'medium'
+//   this.damage = -18;
+//   break;
+
+const healthPotionSmall = new HealthPotion(sumRoll())
+const healthPotionMedium = new HealthPotion(sumRoll(2))
+const healthPotionLarge = new HealthPotion(sumRoll(4))
+const healthPotionMax = new HealthPotion(sumRoll(20));
+
+console.log(healthPotionMax);
