@@ -21,9 +21,7 @@ class Character {
     let list = (itemArr) => {
       console.log(itemArr[0])
       for(let i = 0; i < itemArr[1].length; i++) {
-        console.log(Object.keys(itemArr[1][i])[1] + ':', Object.values(itemArr[1][i])[1], '\n', Object.keys(itemArr[1][i])[2] + ':', Object.values(itemArr[1][i])[2] )
-
-      // console.log(itemArr[1][i].name, ' ', itemArr[1][i][Object.keys(itemArr[1][i])[2]])
+        console.log(Object.keys(itemArr[1][i])[1] + ':', Object.values(itemArr[1][i])[1], '\n', Object.keys(itemArr[1][i])[2] + ':', Object.values(itemArr[1][i])[2]);
     }
   }
     list(this.weaponArr);
