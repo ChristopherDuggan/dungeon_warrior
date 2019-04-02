@@ -32,3 +32,10 @@ This game's underlying logic has been is largely based on the World of Darkness'
 * Combat against multiple enemies
 * Character parties with up to 4 members
 * Graphics that actually look nice 
+
+## (Very) Rough Wireframes
+
+![](https://lh3.googleusercontent.com/-u-bPFTjO31c/XKIaSOy9G3I/AAAAAAAAMYc/44aOIQMwauo1inItSfVqslovq9vEYg67QCK8BGAs/s0/2019-04-01.jpg)
+
+
+![](https://lh3.googleusercontent.com/-7kxMAIAbh54/XKIaRiHlp0I/AAAAAAAAMYY/jlsnf6i7I2AvuNF58rNnl8WF94y9y0E3QCK8BGAs/s0/2019-04-01.jpg)
