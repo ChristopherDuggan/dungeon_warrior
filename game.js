@@ -1,99 +1,60 @@
 const game = {
-  attributes: {agility: 3},
-  abilities: {attack: 3, dodge: 3},
-  inventory:
-    [
-      [{type: 'weapon', name: 'Sword of Balthazar', damage: 10}],
-      [{type: 'armor', name: 'Helm of the Wizard', soak: 2}],
-      [{type: 'health potion', size: 'SM'}]
-    ],
-  weapon: null,
-  armor: null,
-  this.weaponArr: this.inventory,
-  // armorArr: this.inventory[1],
-  // potionArr: this.inventory[2],
-
-
-
-
+  actionQueue: [],
+  defenseQueue: [],
 
   d10(dice) {
-    return this.adjustRoll(this.rawRoll(dice));
-  },
-  rawRoll(dice) {
-    let rawArr = [];
+    let d10Arr = [];
     for (let i = 0; i < (dice || 1); i++) {
-      rawArr.push((Math.ceil(Math.random() * 10)))
+      d10Arr.push((Math.ceil(Math.random() * 10)))
     }
-    console.log(`rawArr: [${rawArr}]`);
-    return rawArr;
+      // console.log(d10Arr)
+    return d10Arr;
   },
-  adjustRoll(arr) {
-    arr.sort(function(a,b){
+  adjustRoll(rollArr) {
+    rollArr.sort(function(a,b){
         return a - b;
       })
-    while(arr.includes(1) && arr.some((num) => num > 5)) {
-      arr.shift()
-      arr.pop()
+    while(rollArr.includes(1) && rollArr.some((num) => num > 5)) {
+      rollArr.shift()
+      rollArr.pop()
     }
-    console.log(`arr: [${arr}]`)
-    return arr;
+    // console.log(`rollArr: [${rollArr}]`)
+    let adjustedArr = rollArr
+    return adjustedArr;
   },
-//   checkBotch(arr) {
-//     if (arr.includes(1)){
-//       console.log('botch!')
-//       return true;
-//     } else {
-//       return false;
-//     }
-//   },
-//   checkCrit(arr) {
-//     if (arr.includes(10)) {
-//       console.log('it\'s a crit threat')
-//       if (this.rawRoll() > 5) {
-//         console.log('crit success!')
-//         return true;
-//       } else {
-//         console.log('it didn\'t succeed though');
-//         return false;
-//       }
-//     }
-//   },
-//   attack(target) {
-//     let attackResult = this.d10(this.attributes.agility + this.abilities.attack);
-//     this.checkBotch(attackResult);
-//     if (this.checkCrit(attackResult)) {
-//
-//     };
-//     return attackResult;
-//   },
-//
-// // dodge must pass in attack result, do comparison inside.
-//   dodge() {
-//     let dodgeResult = this.d10(this.attributes.agility + this.abilities.dodge);
-//     this.checkBotch(dodgeResult);
-//     return dodgeResult;
-//   },
-//   successCheck(offenseArr, defenseArr) {
-//     let successCount = 0;
-//     for(let i = 0; i < offenseArr.length; i++) {
-//       if (offenseArr[i] > 5) {
-//         successCount++;
-//       }
-//     }
-//     for (let i = 0; i < defenseArr.length; i++) {
-//       if(defenseArr[i] > 5) {
-//         successCount--;
-//       }
-//     }
-//     return successCount
-//   },
-  // hitCheck() {
-  //
-  // }
+  checkBotch(arr) {
+    if (arr.includes(1)){
+      console.log('botch!')
+      return true;
+    } else {
+      return false;
+    }
+  },
+  checkCrit(arr) {
+    let crit = false;
+    if (arr.includes(10)) {
+      console.log('crit threat count = ', arr.filter(num => num ===10).length )
+      for (let i = 0; i < arr.filter(num => num ===10).length; i++) {
+        if (d10()[0] > 5) {
+          console.log('crit threat ' + `${i+1}` + ' was a success!')
+          crit = true;
+          return crit;
+        } else {
+          console.log('crit threat ' + `${i+1}` + ' didn\'t succeed');
+        }
+      }
+    }
+    return crit;
+  },
+  checkSucessses(arr) {return arr.filter(num => num > 5).length},
+  checkDefenseQueue() {},
+  checkOpposed(offenseCount, defenseCount) {return offenseCount-defenseCount},
+  runActionQueue() {
+    if (game.actionQueue[0][0].includes('attack')){
+      console.log(game.actionQueue[0][0].split(' '))
+    }
+    // while(game.actionQueue > 0) {
+    //
+    // }
+  },
 }
-
-console.log(game.weaponArr)
-
-// game.dodge()
-// game.checkCrit(game.adjustRoll(game.rawRoll(5)))
