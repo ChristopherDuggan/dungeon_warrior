@@ -97,4 +97,20 @@ const domController = {
 
 }
 
+// THE SPACE IN THE ACTION DECLARATION IS SUPER IMPORTANT
+// testchar attack button:
+// testChar.declare(testChar.attack(), 'attack ', 'TARGET NAME')
+//
+// testchar block button:
+// testChar.declare(testChar.block(), 'block ')
+//
+// testChar dodge button:
+// testChar.declare(testChar.dodge(), 'dodge ')
+//
+// testChar run button:
+// testhar.declare(testChar.run(), 'run ')
+//
+// testChar inventory button:
+// testChar.declare(testChar.inventory(), 'inventory ')
+
 domController.initDom()

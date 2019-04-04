@@ -95,9 +95,9 @@ ${Object.keys(itemArr[i])[2]}: ${Object.values(itemArr[i])[2]}`)
   }
   run() {
     if(game.d10() > 5) {
-      console.log('you escaped! combat ends');
+      return true
     } else {
-      console.log('you didn\'t escape! combat continues')
+      return false
     }
   }
 
