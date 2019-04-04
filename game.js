@@ -1,5 +1,5 @@
 const game = {
-  combatantArray: [testChar, bob],
+  combatantArray: [player, bob],
   actionQueue: [],
   defenseQueue: [],
   critCount: 0,
@@ -121,13 +121,17 @@ const game = {
             game.actionQueue.shift();
             console.log(game.actionQueue)
           }
-
         } else {
           console.log(`${actionTarget.name} is already down!`)
           game.actionQueue.shift()
         }
-      } else if (actionId.includes('inventory')) {
+      } else if (actionId.includes('use')) {
+        if( )
 
+        if (item.type === 'weapon') {this.weapon = item;}
+        if (item.type === 'armor') {this.armor = item}
+        
+        game.actionQueue.shift()
       } else {
         if(actionDoer.run()) {
           console.log('they ran away')
@@ -144,3 +148,4 @@ const game = {
     }
   },
 }
+player.showInventory()

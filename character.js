@@ -24,30 +24,33 @@ class Character {
     return this.inventory.filter(item => item.type === itemType);
   }
   showInventory() {
+    let textChunk = `<button class="button" id="closeInventory">CLOSE</button>`;
     let list = (itemArr) => {
-      console.log (itemArr[0].type.toUpperCase() + ' LIST:');
+      textChunk += `<ul><h4>${itemArr[0].type.toUpperCase()} LIST:</h4>`
       for(let i = 0; i < itemArr.length; i++) {
-        console.log(
-`Name: ${itemArr[i].name}
-${Object.keys(itemArr[i])[2]}: ${Object.values(itemArr[i])[2]}`)
+        textChunk+=
+`<li><button class="button" id="use ${itemArr[i].name}">USE</button> NAME: ${itemArr[i].name} ${Object.keys(itemArr[i])[2].toUpperCase()}: ${Object.values(itemArr[i])[2]}</li>`
       }
+      textChunk += `</ul>`
     }
     list(this.weaponArr);
     list(this.armorArr);
     list(this.potionArr);
+    domController.updateTextDisplay(textChunk);
   }
   // usePotion(item) {
   //   this.potionArr.pop()
   //   this.currentHp +=0
   // }
   equip(item) {
-    if (item.type === 'weapon') {
-      this.weapon = item;
-    }
-    if (item.type === 'armor') {
-      this.armor = item;
-    }
+    if (item.type === 'weapon') {this.weapon = item;}
+    if (item.type === 'armor') {this.armor = item}
   }
+
+  useCombat(item) {
+      return item;
+  }
+
   declare(action, actionName, target = null) {
     let actionId = actionName + this.name;
     if(actionId.includes('dodge') || actionId.includes('block')) {
@@ -95,14 +98,33 @@ ${Object.keys(itemArr[i])[2]}: ${Object.values(itemArr[i])[2]}`)
   }
   run() {
     if(game.d10() > 5) {
-      return true
+      return true;
     } else {
-      return false
+      return false;
     }
   }
 
-}
+  useItem(choice) {
+    console.log(choice)
+    this.declare(this.useCombat(this.inventory.filter(item => item.name === choice.split(' ')[1])[0]), 'use ')
 
+    // if (domController.mode === 'combat' ) {
+    //
+    //   // if(thingie is a weapon or armor) {
+    //   //declare: I'm going to equip this item
+    //   //this.declare('action id, which is EQUIP and CHARNAME', ITEM OBJECT)
+    // }
+      // if (this.inventory.filter(item => item.name === choice.split(' ')[1])[0].type.match(/^(weapon|armor)$/) ) {
+      //   this.declare(this.equip(this.inventory.filter(item => item.name === choice.split(' ')[1])[0]), 'equip ')
+      // }
+      //
+      // if (this.inventory.filter(item => item.name === choice.split(' ')[1])[0].type === 'health potion') {
+      //   console.log('this is a health potion')
+      // }
+
+    }
+  // }
+}
 class Player extends Character {
   constructor(level, attributes, abilities, inventory,name){
   super(level, attributes, abilities, inventory, name)
@@ -111,20 +133,20 @@ class Player extends Character {
   }
 }
 
-let testChar = new Player (1,
+let player = new Player (1,
   {strength: 3, agility: 3, toughness: 3},
   {attack: 3, block: 3, dodge: 3},
   [
     {type: 'weapon', name: 'stick', damage: 1},
-    {type: 'weapon', name: 'Sword of Balthazar', damage: 10},
-    {type: 'armor', name: 'Helm of the Wizard', soak: 2},
-    {type: 'health potion', name: 'Small Health Potion', heal: '+9hp', size: 'SM'},
-    {type: 'health potion', name: 'Small Health Potion', heal: '+9hp', size: 'SM'},
-    {type: 'health potion', name: 'Small Health Potion', heal: '+9hp', size: 'SM'},
-    {type: 'health potion', name: 'Small Health Potion', heal: '+9hp', size: 'SM'}
+    {type: 'weapon', name: 'Sword_of_Balthazar', damage: 10},
+    {type: 'armor', name: 'Helm_of_the_Wizard', soak: 2},
+    {type: 'health potion', name: 'Small_Health_Potion', heal: '+9hp', size: 'SM'},
+    {type: 'health potion', name: 'Small_Health_Potion', heal: '+9hp', size: 'SM'},
+    {type: 'health potion', name: 'Small_Health_Potion', heal: '+9hp', size: 'SM'},
+    {type: 'health potion', name: 'Small_Health_Potion', heal: '+9hp', size: 'SM'}
   ]);
-  testChar.equip(testChar.armorArr[0])
-  testChar.equip(testChar.weaponArr[1])
+  // player.equip(player.armorArr[0])
+  // player.equip(player.weaponArr[1])
 
 class Baddie extends Character {
   constructor(level, attributes, abilities, inventory){
@@ -141,12 +163,12 @@ let bob = new Baddie (1,
   [
     {type: 'weapon', name: 'stick', damage: 1},
     {type: 'armor', name: 'Helm of the Wizard', soak: 2},
-    {type: 'health potion', name: 'Small Health Potion', heal: '+9hp', size: 'SM'}
+    {type: 'health potion', name: 'Small_Health_Potion', heal: '+9hp', size: 'SM'}
   ]);
 // console.log(bob);
 
 
-// testChar.usePotion()
-// testChar.usePotion()
-// testChar.dodge([5, 6, 10, 7,])
-// testChar.declareAttack('bob', 'dodge');
+// player.usePotion()
+// player.usePotion()
+// player.dodge([5, 6, 10, 7,])
+// player.declareAttack('bob', 'dodge');

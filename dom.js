@@ -2,7 +2,8 @@ const domController = {
   body: document.querySelector('body'),
   main: document.createElement('main'),
   buttonBox: document.createElement('div'),
-  mode:'',
+  textDisplay: document.createElement('div'),
+  mode:'combat',
 
 
   'combatButtonArr': ['inventory','attack', 'dodge', 'block', 'run'],
@@ -16,11 +17,21 @@ const domController = {
     this.body.appendChild(this.main);
   },
   setButtonBox() {
-    this.buttonBox.style.height = '100px';
+    this.buttonBox.style.height = '25px';
     this.buttonBox.style.width = '500px';
-    this.buttonBox.style.backgroundColor = 'black';
+    this.buttonBox.style.backgroundColor = 'green';
     this.buttonBox.id = 'buttonBox';
     this.body.appendChild(this.buttonBox);
+  },
+  setTextDisplay() {
+    this.textDisplay.style.width = '500px';
+    this.textDisplay.style.height = '300px';
+    this.textDisplay.style.backgroundColor = 'black';
+    this.textDisplay.style.color = '#ddd';
+    this.textDisplay.style.fontSize = '20px';
+    this.textDisplay.style.overflow = 'scroll';
+    this.textDisplay.id = 'textDisplay';
+    this.body.appendChild(this.textDisplay);
   },
   makeButtons(arr) {
     this.buttonBox.innerHTML = '';
@@ -33,7 +44,10 @@ const domController = {
     }
   },
   domAction(choice) {
-    console.log(`perform the ${choice} action`)
+    // console.log(`perform the ${choice} action`)
+    if(choice.includes('use'))  {
+      player.useItem(choice)
+    }
   },
   addListeners() {
     domController.body.addEventListener('click', e => {
@@ -87,30 +101,36 @@ const domController = {
   initDom() {
     this.setMain()
     this.setButtonBox()
+    this.setTextDisplay()
     this.makeButtons(this.combatButtonArr)
     this.addListeners()
+  },
+  updateTextDisplay(info) {
+    this.textDisplay.innerHTML = info
   },
   changeMode(newMode) {
     this.mode = newMode;
     this.makeButtons(this[`${newMode}ButtonArr`])
-  }
-
+  },
+  closeInventory() {
+    domController.updateTextDisplay('')
+  },
 }
 
 // THE SPACE IN THE ACTION DECLARATION IS SUPER IMPORTANT
-// testchar attack button:
-// testChar.declare(testChar.attack(), 'attack ', 'TARGET NAME')
+// player attack button:
+// player.declare(player.attack(), 'attack ', 'TARGET NAME')
 //
-// testchar block button:
-// testChar.declare(testChar.block(), 'block ')
+// player block button:
+// player.declare(player.block(), 'block ')
 //
-// testChar dodge button:
-// testChar.declare(testChar.dodge(), 'dodge ')
+// player dodge button:
+// player.declare(player.dodge(), 'dodge ')
 //
-// testChar run button:
-// testhar.declare(testChar.run(), 'run ')
+// player run button:
+// testhar.declare(player.run(), 'run ')
 //
-// testChar inventory button:
-// testChar.declare(testChar.inventory(), 'inventory ')
+// player inventory button:
+// player.showInventory() if mode is combat, push use item to item queue if mode is map, use the item
 
 domController.initDom()
