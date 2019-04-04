@@ -7,6 +7,7 @@ const domController = {
 
   'combatButtonArr': ['inventory','attack', 'dodge', 'block', 'run'],
   'mapButtonArr': ['inventory','up', 'down','left','right'],
+  'startButtonArr': ['weenie', 'chumpo','tuff tim','MeanMug', 'THE BRUTALIZER'],
 
   setMain() {
     this.main.style.height = '500px';
