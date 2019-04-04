@@ -2,6 +2,7 @@ const game = {
   combatantArray: [testChar, bob],
   actionQueue: [],
   defenseQueue: [],
+  critCount: 0,
 
   d10(dice) {
     let d10Arr = [];
@@ -32,20 +33,22 @@ const game = {
     }
   },
   checkCrit(arr) {
-    let crit = false;
+    critCount = 0;
     if (arr.includes(10)) {
-      console.log('crit threat count = ', arr.filter(num => num ===10).length )
+      console.log('The attack threatens to be critical!','crit threat count = ', arr.filter(num => num ===10).length )
+      console.log(critCount)
       for (let i = 0; i < arr.filter(num => num ===10).length; i++) {
-        if (d10()[0] > 5) {
+        if (game.d10()[0] > 5) {
           console.log('crit threat ' + `${i+1}` + ' was a success!')
-          crit = true;
-          return crit;
+          critCount += 1;
+          console.log(critCount)
         } else {
           console.log('crit threat ' + `${i+1}` + ' didn\'t succeed');
+          console.log(critCount)
         }
       }
     }
-    return crit;
+    return critCount;
   },
   checkSucessses(arr) {return arr.filter(num => num > 5).length},
   //refactor all of the dodge/block check logic and put it BELOW
@@ -75,14 +78,17 @@ const game = {
       let actionRoll =  currentAction[1];
       let actionTarget = game.combatantArray.find(obj => obj.name == currentAction[2]);
       let actionDoer = game.combatantArray.find(obj => obj.name == (actionId.split(' ')[actionId.split(' ').length-1]));
-      if (actionId.includes('attack')){
-        if (actionTarget.currentHp > 0) {
 
+      if (actionId.includes('attack')){
+        critCount = 0;
+        console.log(critCount)
+        game.checkCrit(actionRoll)
+        console.log(critCount)
+        if (actionTarget.currentHp > 0) {
           if(game.checkBotch(actionRoll)) {
             console.log(`${actionDoer.name} hurt themself and took 5 damage`)
             actionDoer.currentHp -= 5
             game.actionQueue.shift();
-            console.log(game.actionQueue)
           } else if(game.defenseQueue.find(obj => obj.includes('dodge ' + actionTarget.name))) {
             let defenseArr = game.defenseQueue[game.defenseQueue.findIndex(obj => obj.includes('dodge ' + actionTarget.name))][1];
             game.checkSucessses(defenseArr)
@@ -93,20 +99,20 @@ const game = {
 
           if (netSuccesses > 1) {
             console.log(`There were ${netSuccesses} total successes. It was a solid hit!`)
-            let finalDamage = game.checkOpposed(game.checkSucessses(actionDoer.damage()), game.checkSucessses(actionTarget.soak()));
+            console.log(critCount);
+            let finalDamage = game.checkOpposed(game.checkSucessses(actionDoer.damage()) * (critCount + 1), game.checkSucessses(actionTarget.soak()));
             actionTarget.currentHp -= finalDamage;
             console.log(`${actionDoer.name} did ${finalDamage} damage to ${actionTarget.name}. ${actionTarget.name} has ${actionTarget.currentHp} hp left.`)
             game.checkDead(actionTarget)
             game.actionQueue.shift();
-            console.log(game.actionQueue)
           } else if (netSuccesses === 1) {
             console.log(`There was ${netSuccesses} total success. The attack hits!`)
-            let finalDamage = game.checkOpposed(game.checkSucessses(actionDoer.damage()), game.checkSucessses(actionTarget.soak()));
+            console.log(critCount);
+            let finalDamage =  game.checkOpposed(game.checkSucessses(actionDoer.damage()) * (critCount + 1), game.checkSucessses(actionTarget.soak()));
             actionTarget.currentHp -= finalDamage;
             console.log(`${actionDoer.name} did ${finalDamage} damage to ${actionTarget.name}. ${actionTarget.name} has ${actionTarget.currentHp} hp left.`)
             game.checkDead(actionTarget)
             game.actionQueue.shift();
-            console.log(game.actionQueue)
           } else {
             console.log(`There were 0 total successes. The attack missed.`)
             game.checkDead(actionTarget)
@@ -118,6 +124,10 @@ const game = {
           console.log(`${actionTarget.name} is already down!`)
           game.actionQueue.shift()
         }
+      } else if (actionId.includes('inventory')) {
+
+      } else {
+        // ###################RUN###################
       }
     }
   },
