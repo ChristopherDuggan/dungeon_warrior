@@ -13,3 +13,6 @@
   -inventory
     --use potion
     --equip item
+
+BIG STUFF
+Refactor complex action functions (action declaration etc) to use objects rather than arrays to carry information

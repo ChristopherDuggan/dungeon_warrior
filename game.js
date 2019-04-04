@@ -1,4 +1,5 @@
 const game = {
+  combatantArray: [testChar, bob],
   actionQueue: [],
   defenseQueue: [],
 
@@ -50,8 +51,28 @@ const game = {
   checkDefenseQueue() {},
   checkOpposed(offenseCount, defenseCount) {return offenseCount-defenseCount},
   runActionQueue() {
-    if (game.actionQueue[0][0].includes('attack')){
-      console.log(game.actionQueue[0][0].split(' '))
+    let currentAction = game.actionQueue[0];
+    let actionId = currentAction[0];
+    let actionRoll =  currentAction[1];
+    let actionTarget = currentAction[2];
+    let actionDoer = actionId.split(' ')[actionId.split(' ').length-1]
+    if (actionId.includes('attack')){
+      if (game.combatantArray.find(obj => obj.name == actionTarget).currentHp > 0) {
+        if(game.checkBotch(actionRoll)) {
+          console.log(`${actionDoer} hurth themself and took 5 damage`)
+          game.combatantArray.find(obj => obj.name == actionDoer).currentHp -= 5
+        }
+        console.log(game.checkSucessses(actionRoll))
+        if(game.defenseQueue.find(obj => obj.includes('dodge ' + actionTarget))) {
+          let defenseArr = game.defenseQueue[game.defenseQueue.findIndex(obj => obj.includes('dodge ' + actionTarget))][1];
+
+          console.log(game.checkSucessses(defenseArr))
+          console.log(game.checkSucessses(actionRoll) - game.checkSucessses(defenseArr))
+        }
+      }
+       else {
+        game.actionQueue.shift
+      }
     }
     // while(game.actionQueue > 0) {
     //

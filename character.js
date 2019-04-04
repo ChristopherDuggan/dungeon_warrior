@@ -17,8 +17,6 @@ class Character {
     this.dodgeTotal = this.attributes.agility + this.abilities.dodge;
     this.blockTotal = this.attributes.strength + this.abilities.block;
     this.soakTotal = this.attributes.toughness;
-    // this.actionQueue = [];
-    // this.defenseQueue = [];
     this.initiative = 0;
   }
   getInventoryArr(itemType) {
@@ -50,7 +48,7 @@ ${Object.keys(itemArr[i])[2]}: ${Object.values(itemArr[i])[2]}`)
     }
   }
   declare(action, actionName, target=null) {
-    let actionId = actionName + this.name + target;
+    let actionId = actionName + this.name;
     if(actionId.includes('dodge') || actionId.includes('block')) {
       return game.defenseQueue.push([actionId, action]);
     } else {
@@ -62,18 +60,17 @@ ${Object.keys(itemArr[i])[2]}: ${Object.values(itemArr[i])[2]}`)
     // console.log(this.name, 'attacked', target, 'and rolled', attackArr);
     let attackArr = game.adjustRoll(rawRoll);
     // console.log('after adjustment, their remaining rolls are returned below as');
-    game.checkBotch(attackArr);
-    return [rawRoll, attackArr];
+    return attackArr;
   }
     dodge() {
       let rawRoll = game.d10(this.dodgeTotal);
       let dodgeArr = game.adjustRoll(rawRoll);
-    return [rawRoll, dodgeArr];
+    return dodgeArr;
   }
     block() {
       let rawRoll = game.d10(this.blockTotal);
       let blockArr = game.adjustRoll(rawRoll);
-    return [rawRoll, blockArr];
+    return blockArr;
   }
     soak() {
       if(Boolean(this.armor)) {
@@ -83,7 +80,7 @@ ${Object.keys(itemArr[i])[2]}: ${Object.values(itemArr[i])[2]}`)
       console.log(rawRoll)
       let soakArr = game.adjustRoll(rawRoll);
       console.log(soakArr)
-    return [rawRoll, soakArr];
+    return soakArr;
   }
   run() {
     if(game.d10() > 5) {
@@ -98,7 +95,7 @@ ${Object.keys(itemArr[i])[2]}: ${Object.values(itemArr[i])[2]}`)
 class Player extends Character {
   constructor(level, attributes, abilities, inventory,name){
   super(level, attributes, abilities, inventory, name)
-  this.name = name || 'Mysterious Stranger';
+  this.name = name || 'Mysterious_Stranger';
   this.xp = 0;
   }
 }
