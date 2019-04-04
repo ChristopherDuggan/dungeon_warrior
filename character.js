@@ -16,6 +16,7 @@ class Character {
     this.attackTotal = this.attributes.agility + this.abilities.attack;
     this.dodgeTotal = this.attributes.agility + this.abilities.dodge;
     this.blockTotal = this.attributes.strength + this.abilities.block;
+    this.damageTotal = this.attributes.strength;
     this.soakTotal = this.attributes.toughness;
     this.initiative = 0;
   }
@@ -47,7 +48,7 @@ ${Object.keys(itemArr[i])[2]}: ${Object.values(itemArr[i])[2]}`)
       this.armor = item;
     }
   }
-  declare(action, actionName, target=null) {
+  declare(action, actionName, target = null) {
     let actionId = actionName + this.name;
     if(actionId.includes('dodge') || actionId.includes('block')) {
       return game.defenseQueue.push([actionId, action]);
@@ -62,24 +63,34 @@ ${Object.keys(itemArr[i])[2]}: ${Object.values(itemArr[i])[2]}`)
     // console.log('after adjustment, their remaining rolls are returned below as');
     return attackArr;
   }
-    dodge() {
-      let rawRoll = game.d10(this.dodgeTotal);
-      let dodgeArr = game.adjustRoll(rawRoll);
-    return dodgeArr;
+  dodge() {
+    let rawRoll = game.d10(this.dodgeTotal);
+    let dodgeArr = game.adjustRoll(rawRoll);
+  return dodgeArr;
   }
-    block() {
-      let rawRoll = game.d10(this.blockTotal);
-      let blockArr = game.adjustRoll(rawRoll);
-    return blockArr;
+  block() {
+    let rawRoll = game.d10(this.blockTotal);
+    let blockArr = game.adjustRoll(rawRoll);
+  return blockArr;
   }
-    soak() {
-      if(Boolean(this.armor)) {
-        this.soakTotal = this.attributes.toughness + this.armor.soak;
-      }
-      let rawRoll = game.d10(this.soakTotal);
-      console.log(rawRoll)
-      let soakArr = game.adjustRoll(rawRoll);
-      console.log(soakArr)
+  damage() {
+    if(Boolean(this.weapon)) {
+      this.damageTotal = this.attributes.strength + this.weapon.damage;
+    }
+    let rawRoll = game.d10(this.damageTotal);
+    console.log(rawRoll)
+    let damageArr = game.adjustRoll(rawRoll);
+    console.log(damageArr)
+    return damageArr;
+  }
+  soak() {
+    if(Boolean(this.armor)) {
+      this.soakTotal = this.attributes.toughness + this.armor.soak;
+    }
+    let rawRoll = game.d10(this.soakTotal);
+    console.log(rawRoll)
+    let soakArr = game.adjustRoll(rawRoll);
+    console.log(soakArr)
     return soakArr;
   }
   run() {
@@ -101,8 +112,8 @@ class Player extends Character {
 }
 
 let testChar = new Player (1,
-  {strength: 1, agility: 3, toughness: 1},
-  {attack: 3, block: 1, dodge: 1},
+  {strength: 3, agility: 3, toughness: 3},
+  {attack: 3, block: 3, dodge: 3},
   [
     {type: 'weapon', name: 'stick', damage: 1},
     {type: 'weapon', name: 'Sword of Balthazar', damage: 10},

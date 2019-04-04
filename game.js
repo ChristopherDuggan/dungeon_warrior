@@ -48,26 +48,45 @@ const game = {
     return crit;
   },
   checkSucessses(arr) {return arr.filter(num => num > 5).length},
+  //refactor all of the dodge/block check logic and put it BELOW
   checkDefenseQueue() {},
   checkOpposed(offenseCount, defenseCount) {return offenseCount-defenseCount},
+  // calcDamage(netSuccesses, crit = false) {
+  //   if (crit === true) {
+  //     return
+  //   } else {
+  //     return
+  //   }
+  // },
   runActionQueue() {
     let currentAction = game.actionQueue[0];
     let actionId = currentAction[0];
     let actionRoll =  currentAction[1];
     let actionTarget = currentAction[2];
-    let actionDoer = actionId.split(' ')[actionId.split(' ').length-1]
+    let actionDoer = game.combatantArray.find(obj => obj.name == (actionId.split(' ')[actionId.split(' ').length-1]));
     if (actionId.includes('attack')){
       if (game.combatantArray.find(obj => obj.name == actionTarget).currentHp > 0) {
         if(game.checkBotch(actionRoll)) {
           console.log(`${actionDoer} hurth themself and took 5 damage`)
-          game.combatantArray.find(obj => obj.name == actionDoer).currentHp -= 5
+          actionDoer.currentHp -= 5
+          // ##############INCLUDE THE SHIFT JUNK###########
         }
         console.log(game.checkSucessses(actionRoll))
         if(game.defenseQueue.find(obj => obj.includes('dodge ' + actionTarget))) {
           let defenseArr = game.defenseQueue[game.defenseQueue.findIndex(obj => obj.includes('dodge ' + actionTarget))][1];
-
-          console.log(game.checkSucessses(defenseArr))
-          console.log(game.checkSucessses(actionRoll) - game.checkSucessses(defenseArr))
+          game.checkSucessses(defenseArr)
+          let netSuccesses = game.checkSucessses(actionRoll) - game.checkSucessses(defenseArr);
+          if (netSuccesses > 1) {
+            console.log(`There were ${netSuccesses} total successes. It was a solid hit!`)
+            console.log(actionDoer.damage());
+          } else if (netSuccesses === 1) {
+            console.log(`There was ${netSuccesses} total success. The attack hits!`)
+            console.log(actionDoer.damage());
+          } else {
+            console.log(`There were 0 total successes. The attack missed.`)
+          }
+          // console.log(game.checkSucessses(defenseArr))
+          // console.log(game.checkSucessses(actionRoll) - game.checkSucessses(defenseArr))
         }
       }
        else {
