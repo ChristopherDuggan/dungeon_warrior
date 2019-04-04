@@ -78,9 +78,9 @@ ${Object.keys(itemArr[i])[2]}: ${Object.values(itemArr[i])[2]}`)
       this.damageTotal = this.attributes.strength + this.weapon.damage;
     }
     let rawRoll = game.d10(this.damageTotal);
-    console.log(rawRoll)
+    // console.log(rawRoll)
     let damageArr = game.adjustRoll(rawRoll);
-    console.log(damageArr)
+    // console.log(damageArr)
     return damageArr;
   }
   soak() {
@@ -88,9 +88,9 @@ ${Object.keys(itemArr[i])[2]}: ${Object.values(itemArr[i])[2]}`)
       this.soakTotal = this.attributes.toughness + this.armor.soak;
     }
     let rawRoll = game.d10(this.soakTotal);
-    console.log(rawRoll)
+    // console.log(rawRoll)
     let soakArr = game.adjustRoll(rawRoll);
-    console.log(soakArr)
+    // console.log(soakArr)
     return soakArr;
   }
   run() {
@@ -124,6 +124,7 @@ let testChar = new Player (1,
     {type: 'health potion', name: 'Small Health Potion', heal: '+9hp', size: 'SM'}
   ]);
   testChar.equip(testChar.armorArr[0])
+  testChar.equip(testChar.weaponArr[1])
 
 class Baddie extends Character {
   constructor(level, attributes, abilities, inventory){

@@ -59,40 +59,57 @@ const game = {
   //   }
   // },
   runActionQueue() {
+    let netSuccesses = 0;
     let currentAction = game.actionQueue[0];
     let actionId = currentAction[0];
     let actionRoll =  currentAction[1];
-    let actionTarget = currentAction[2];
+    let actionTarget = game.combatantArray.find(obj => obj.name == currentAction[2]);
     let actionDoer = game.combatantArray.find(obj => obj.name == (actionId.split(' ')[actionId.split(' ').length-1]));
     if (actionId.includes('attack')){
-      if (game.combatantArray.find(obj => obj.name == actionTarget).currentHp > 0) {
+      if (actionTarget.currentHp > 0) {
+
         if(game.checkBotch(actionRoll)) {
-          console.log(`${actionDoer} hurth themself and took 5 damage`)
+          console.log(`${actionDoer.name} hurt themself and took 5 damage`)
           actionDoer.currentHp -= 5
-          // ##############INCLUDE THE SHIFT JUNK###########
+          game.actionQueue.shift();
+          return;
         }
         console.log(game.checkSucessses(actionRoll))
-        if(game.defenseQueue.find(obj => obj.includes('dodge ' + actionTarget))) {
-          let defenseArr = game.defenseQueue[game.defenseQueue.findIndex(obj => obj.includes('dodge ' + actionTarget))][1];
+
+        if(game.defenseQueue.find(obj => obj.includes('dodge ' + actionTarget.name))) {
+          let defenseArr = game.defenseQueue[game.defenseQueue.findIndex(obj => obj.includes('dodge ' + actionTarget.name))][1];
           game.checkSucessses(defenseArr)
-          let netSuccesses = game.checkSucessses(actionRoll) - game.checkSucessses(defenseArr);
-          if (netSuccesses > 1) {
-            console.log(`There were ${netSuccesses} total successes. It was a solid hit!`)
-            console.log(actionDoer.damage());
-          } else if (netSuccesses === 1) {
-            console.log(`There was ${netSuccesses} total success. The attack hits!`)
-            console.log(actionDoer.damage());
-          } else {
-            console.log(`There were 0 total successes. The attack missed.`)
-          }
-          // console.log(game.checkSucessses(defenseArr))
-          // console.log(game.checkSucessses(actionRoll) - game.checkSucessses(defenseArr))
+          netSuccesses = game.checkSucessses(actionRoll) - game.checkSucessses(defenseArr);
+        } else {
+          netSuccesses = game.checkSucessses(actionRoll)
         }
-      }
-       else {
-        game.actionQueue.shift
+
+
+        if (netSuccesses > 1) {
+          console.log(`There were ${netSuccesses} total successes. It was a solid hit!`)
+          let finalDamage = game.checkOpposed(game.checkSucessses(actionDoer.damage()), game.checkSucessses(actionTarget.soak()));
+          actionTarget.currentHp -= finalDamage;
+          console.log(`${actionDoer.name} did ${finalDamage} damage to ${actionTarget.name}. ${actionTarget.name} has ${actionTarget.currentHp} hp left.`)
+          game.actionQueue.shift();
+          return;
+        } else if (netSuccesses === 1) {
+          console.log(`There was ${netSuccesses} total success. The attack hits!`)
+          let finalDamage = game.checkOpposed(game.checkSucessses(actionDoer.damage()), game.checkSucessses(actionTarget.soak()));
+          actionTarget.currentHp -= finalDamage;
+          console.log(`${actionDoer.name} did ${finalDamage} damage to ${actionTarget.name}. ${actionTarget.name} has ${actionTarget.currentHp} hp left.`)
+          game.actionQueue.shift();
+          return;
+        } else {
+          console.log(`There were 0 total successes. The attack missed.`)
+          game.actionQueue.shift();
+          return;
+        }
+      } else {
+        console.log(`${actionTarget.name} is already down!`)
+        game.actionQueue.shift()
       }
     }
+
     // while(game.actionQueue > 0) {
     //
     // }
