@@ -91,6 +91,7 @@ const game = {
               actionTarget.soakTotal += game.checkSucessses(defenseArr)
             }
             let finalDamage = game.checkOpposed(game.checkSucessses(actionDoer.damage()) * (critCount + 1), game.checkSucessses(actionTarget.soak()));
+            if (finalDamage < 0) {finalDamage = 0}
             actionTarget.currentHp -= finalDamage;
             console.log(`${actionDoer.name} did ${finalDamage} damage to ${actionTarget.name}. ${actionTarget.name} has ${actionTarget.currentHp} hp left.`)
             game.checkDead(actionTarget)
@@ -102,6 +103,7 @@ const game = {
               actionTarget.soakTotal += game.checkSucessses(defenseArr)
             }
             let finalDamage =  game.checkOpposed(game.checkSucessses(actionDoer.damage()) * (critCount + 1), game.checkSucessses(actionTarget.soak()));
+            if (finalDamage < 0) {finalDamage = 0}
             actionTarget.currentHp -= finalDamage;
             console.log(`${actionDoer.name} did ${finalDamage} damage to ${actionTarget.name}. ${actionTarget.name} has ${actionTarget.currentHp} hp left.`)
             game.checkDead(actionTarget)
