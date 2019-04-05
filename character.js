@@ -29,22 +29,35 @@ class Character {
       textChunk += `<ul><h4>${itemArr[0].type.toUpperCase()} LIST:</h4>`
       for(let i = 0; i < itemArr.length; i++) {
         textChunk+=
-`<li><button class="button" id="use ${itemArr[i].name}">USE</button> NAME: ${itemArr[i].name} ${Object.keys(itemArr[i])[2].toUpperCase()}: ${Object.values(itemArr[i])[2]}</li>`
+`<li><button class="button" id="select ${itemArr[i].name}">SELECT</button> NAME: ${itemArr[i].name} ${Object.keys(itemArr[i])[2].toUpperCase()}: ${Object.values(itemArr[i])[2]}</li>`
       }
       textChunk += `</ul>`
     }
-    list(this.weaponArr);
-    list(this.armorArr);
-    list(this.potionArr);
+    if(this.weaponArr.length > 0) {list(this.weaponArr)};
+    if(this.armorArr.length > 0) {list(this.armorArr)};
+    if(this.potionArr.length > 0) {list(this.potionArr)};
     domController.updateTextDisplay(textChunk);
   }
   // usePotion(item) {
   //   this.potionArr.pop()
   //   this.currentHp +=0
   // }
-  equip(item) {
+  use(item) {
+    console.log(item.type)
     if (item.type === 'weapon') {this.weapon = item;}
     if (item.type === 'armor') {this.armor = item}
+    if (item.type === 'health potion') {
+      this.currentHp += item.heal
+      if (this.currentHp > this.maxHp) {this.currentHp = this.maxHp}
+      for(let i = 0; i < this.potionArr.length; i++) {
+        if(this.potionArr[i].name === item.name) {
+          this.potionArr.splice(i, 1);
+          this.showInventory();
+          return }
+      }
+
+      // this.potionArr.findIndex(this.potionArr.name === item.name)
+    }
   }
 
   useCombat(item) {
@@ -104,9 +117,12 @@ class Character {
     }
   }
 
-  useItem(choice) {
-    console.log(choice)
-    this.declare(this.useCombat(this.inventory.filter(item => item.name === choice.split(' ')[1])[0]), 'use ')
+  selectItem(choice) {
+    if(domController.mode === 'combat') {
+      this.declare(this.useCombat(this.inventory.filter(item => item.name === choice.split(' ')[1])[0]), 'select ')
+    } else {
+      player.use(this.inventory.filter(item => item.name === choice.split(' ')[1])[0]);
+    }
 
     // if (domController.mode === 'combat' ) {
     //
@@ -140,10 +156,10 @@ let player = new Player (1,
     {type: 'weapon', name: 'stick', damage: 1},
     {type: 'weapon', name: 'Sword_of_Balthazar', damage: 10},
     {type: 'armor', name: 'Helm_of_the_Wizard', soak: 2},
-    {type: 'health potion', name: 'Small_Health_Potion', heal: '+9hp', size: 'SM'},
-    {type: 'health potion', name: 'Small_Health_Potion', heal: '+9hp', size: 'SM'},
-    {type: 'health potion', name: 'Small_Health_Potion', heal: '+9hp', size: 'SM'},
-    {type: 'health potion', name: 'Small_Health_Potion', heal: '+9hp', size: 'SM'}
+    {type: 'health potion', name: 'Small_Health_Potion', heal: 9, size: 'SM'},
+    {type: 'health potion', name: 'Small_Health_Potion', heal: 9, size: 'SM'},
+    {type: 'health potion', name: 'Small_Health_Potion', heal: 9, size: 'SM'},
+    {type: 'health potion', name: 'Small_Health_Potion', heal: 9, size: 'SM'}
   ]);
   // player.equip(player.armorArr[0])
   // player.equip(player.weaponArr[1])

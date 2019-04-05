@@ -125,12 +125,20 @@ const game = {
           console.log(`${actionTarget.name} is already down!`)
           game.actionQueue.shift()
         }
-      } else if (actionId.includes('use')) {
-        if( )
-
-        if (item.type === 'weapon') {this.weapon = item;}
-        if (item.type === 'armor') {this.armor = item}
-        
+      } else if (actionId.includes('select')) {
+        if (actionRoll.type === 'weapon') {actionDoer.weapon = actionRoll;}
+        if (actionRoll.type === 'armor') {actionDoer.armor = actionRoll}
+        if (actionRoll.type === 'health potion') {
+          actionDoer.currentHp += actionRoll.heal
+          if(actionDoer.currentHp > actionDoer.maxHp) {actionDoer.currentHp = actionDoer.maxHp}
+          for(let i = 0; i < actionDoer.potionArr.length; i++) {
+            if(actionDoer.potionArr[i].name === actionRoll.name) {
+              actionDoer.potionArr.splice(i, 1);
+              game.actionQueue.shift()
+              return;
+            }
+          }
+        }
         game.actionQueue.shift()
       } else {
         if(actionDoer.run()) {

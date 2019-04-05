@@ -11,7 +11,7 @@ const domController = {
   'startButtonArr': ['weenie', 'chumpo','tuff tim','MeanMug', 'THE BRUTALIZER'],
 
   setMain() {
-    this.main.style.height = '500px';
+    this.main.style.height = '50px';
     this.main.style.width = '500px';
     this.main.style.backgroundColor = 'grey';
     this.body.appendChild(this.main);
@@ -45,8 +45,8 @@ const domController = {
   },
   domAction(choice) {
     // console.log(`perform the ${choice} action`)
-    if(choice.includes('use'))  {
-      player.useItem(choice)
+    if(choice.includes('select'))  {
+      player.selectItem(choice)
     }
   },
   addListeners() {
