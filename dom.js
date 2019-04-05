@@ -4,6 +4,7 @@ const domController = {
   buttonBox: document.createElement('div'),
   textDisplay: document.createElement('div'),
   mode:'combat',
+  buttons: true,
 
 
   'combatButtonArr': ['inventory','attack', 'dodge', 'block', 'run'],
@@ -44,9 +45,22 @@ const domController = {
     }
   },
   domAction(choice) {
-    // console.log(`perform the ${choice} action`)
+    console.log(`perform the ${choice} action`)
     if(choice.includes('select'))  {
-      player.selectItem(choice)
+      player.selectItem(choice);
+      this.textDisplay.innerHTML = '';
+    } else if (choice.includes('closeInventory')) {
+      domController.closeInventory();
+    } else if (choice.includes('inventory')) {
+      player.showInventory();
+    } else if (choice.includes('attack')) {
+      player.declare(player.attack(), 'attack ', 'bob')
+    } else if (choice.includes('dodge')) {
+      player.declare(player.dodge(), 'dodge ')
+    } else if (choice.includes('run')) {
+      player.declare(player.run(), 'run ')
+    } else if (choice.includes('block')) {
+      player.declare(player.block(), 'block ')
     }
   },
   addListeners() {
@@ -115,22 +129,19 @@ const domController = {
   closeInventory() {
     domController.updateTextDisplay('')
   },
+  toggleButtons() {
+    this.buttons =! this.buttons
+    let allButton = document.querySelectorAll('button')
+    if(this.buttons === false) {
+      for (let i = 0; i < allButton.length; i++) {
+        allButton[i].classList.add('hidden')
+      }
+    } else {
+      for (let i = 0; i < allButton.length; i++) {
+        allButton[i].classList.remove('hidden')
+      }
+    }
+  },
 }
-
-// THE SPACE IN THE ACTION DECLARATION IS SUPER IMPORTANT
-// player attack button:
-// player.declare(player.attack(), 'attack ', 'TARGET NAME')
-//
-// player block button:
-// player.declare(player.block(), 'block ')
-//
-// player dodge button:
-// player.declare(player.dodge(), 'dodge ')
-//
-// player run button:
-// testhar.declare(player.run(), 'run ')
-//
-// player inventory button:
-// player.showInventory() if mode is combat, push use item to item queue if mode is map, use the item
 
 domController.initDom()

@@ -1,28 +1,15 @@
-//create the combat AI for the baddies
+const isHPotion = a => a.type === 'health potion';
 
-const d10 = (dice) => {
-  let rawRoll = [];
-  for (let i = 0; i < (dice || 1); i++) {
-    rawRoll.push((Math.ceil(Math.random() * 10)))
-  }
-  if (rawRoll.length === 1) {rawRoll = rawRoll[0]}
-  return rawRoll;
-}
-
-const attack = () 
-
-
-attack()
-
-
+// for (let i = 0; i < this.actionsPerTurn; i++) {
+//   if (this.currentHp/this.maxHp <= 0.1 && this.inventory.some(isHPotion())) {
+//     if(game.d10() > 5) {
+//       this.declare(this.attack(), 'attack ', 'Mysterious_Stranger')
+//     }
+//   }
+// }
 //
-// block()
-// dodge()
-// inventory()
-// run()
-//
+
 // // AI types (for now): Maximum Aggression, Aggressive, Tank, Dodger, Coward
-//
 // // MAXIMO AGGRESSINO
 // for (let i = 0; i < this.actions) {
 //   if (this.currentHp/this.maxHp <= 0.1 && this.inventory.some(isHPotion)) {

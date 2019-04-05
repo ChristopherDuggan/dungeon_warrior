@@ -9,7 +9,6 @@ const game = {
     for (let i = 0; i < (dice || 1); i++) {
       d10Arr.push((Math.ceil(Math.random() * 10)))
     }
-      // console.log(d10Arr)
     return d10Arr;
   },
   adjustRoll(rollArr) {
@@ -48,7 +47,6 @@ const game = {
     return critCount;
   },
   checkSucessses(arr) {return arr.filter(num => num > 5).length},
-  //refactor all of the dodge/block check logic and put it BELOW
   checkOpposed(offenseCount, defenseCount) {return offenseCount-defenseCount},
   checkDead(target) {
     if (target.currentHp <= 0) {
@@ -59,13 +57,6 @@ const game = {
     return;
     }
   },
-  // calcDamage(netSuccesses, crit = false) {
-  //   if (crit === true) {
-  //     return
-  //   } else {
-  //     return
-  //   }
-  // },
   runActionQueue() {
     while(game.actionQueue.length > 0) {
       let netSuccesses = 0;
@@ -156,4 +147,3 @@ const game = {
     }
   },
 }
-player.showInventory()

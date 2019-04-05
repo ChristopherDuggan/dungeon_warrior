@@ -19,6 +19,7 @@ class Character {
     this.damageTotal = this.attributes.strength;
     this.soakTotal = this.attributes.toughness;
     this.initiative = 0;
+    this.declaredActionCount = 0;
   }
   getInventoryArr(itemType) {
     return this.inventory.filter(item => item.type === itemType);
@@ -38,12 +39,7 @@ class Character {
     if(this.potionArr.length > 0) {list(this.potionArr)};
     domController.updateTextDisplay(textChunk);
   }
-  // usePotion(item) {
-  //   this.potionArr.pop()
-  //   this.currentHp +=0
-  // }
   use(item) {
-    console.log(item.type)
     if (item.type === 'weapon') {this.weapon = item;}
     if (item.type === 'armor') {this.armor = item}
     if (item.type === 'health potion') {
@@ -55,8 +51,6 @@ class Character {
           this.showInventory();
           return }
       }
-
-      // this.potionArr.findIndex(this.potionArr.name === item.name)
     }
   }
 
@@ -67,9 +61,19 @@ class Character {
   declare(action, actionName, target = null) {
     let actionId = actionName + this.name;
     if(actionId.includes('dodge') || actionId.includes('block')) {
-      return game.defenseQueue.push([actionId, action]);
+      game.defenseQueue.push([actionId, action]);
+      this.declaredActionCount ++;
+      if(this.declaredActionCount >= this.actionsPerTurn) {
+        domController.toggleButtons();
+      }
+      return;
     } else {
-      return game.actionQueue.push([actionId, action, target]);
+      game.actionQueue.push([actionId, action, target])
+      this.declaredActionCount ++;
+      if(this.declaredActionCount >= this.actionsPerTurn) {
+        domController.toggleButtons();
+      }
+      return;
     }
   }
   attack(target) {
@@ -116,30 +120,13 @@ class Character {
       return false;
     }
   }
-
   selectItem(choice) {
     if(domController.mode === 'combat') {
       this.declare(this.useCombat(this.inventory.filter(item => item.name === choice.split(' ')[1])[0]), 'select ')
     } else {
       player.use(this.inventory.filter(item => item.name === choice.split(' ')[1])[0]);
     }
-
-    // if (domController.mode === 'combat' ) {
-    //
-    //   // if(thingie is a weapon or armor) {
-    //   //declare: I'm going to equip this item
-    //   //this.declare('action id, which is EQUIP and CHARNAME', ITEM OBJECT)
-    // }
-      // if (this.inventory.filter(item => item.name === choice.split(' ')[1])[0].type.match(/^(weapon|armor)$/) ) {
-      //   this.declare(this.equip(this.inventory.filter(item => item.name === choice.split(' ')[1])[0]), 'equip ')
-      // }
-      //
-      // if (this.inventory.filter(item => item.name === choice.split(' ')[1])[0].type === 'health potion') {
-      //   console.log('this is a health potion')
-      // }
-
-    }
-  // }
+  }
 }
 class Player extends Character {
   constructor(level, attributes, abilities, inventory,name){
@@ -148,7 +135,6 @@ class Player extends Character {
   this.xp = 0;
   }
 }
-
 let player = new Player (1,
   {strength: 3, agility: 3, toughness: 3},
   {attack: 3, block: 3, dodge: 3},
@@ -161,8 +147,8 @@ let player = new Player (1,
     {type: 'health potion', name: 'Small_Health_Potion', heal: 9, size: 'SM'},
     {type: 'health potion', name: 'Small_Health_Potion', heal: 9, size: 'SM'}
   ]);
-  // player.equip(player.armorArr[0])
-  // player.equip(player.weaponArr[1])
+  player.use(player.armorArr[0])
+  player.use(player.weaponArr[1])
 
 class Baddie extends Character {
   constructor(level, attributes, abilities, inventory){
@@ -170,6 +156,7 @@ class Baddie extends Character {
     this.xp = (level + 1) * 10;
     this.actionsPerTurn = Math.floor(level/10 + 1)
     this.name = 'bob';
+    this.tactics = 'maxAggression'
   }
 }
 
@@ -181,10 +168,3 @@ let bob = new Baddie (1,
     {type: 'armor', name: 'Helm of the Wizard', soak: 2},
     {type: 'health potion', name: 'Small_Health_Potion', heal: '+9hp', size: 'SM'}
   ]);
-// console.log(bob);
-
-
-// player.usePotion()
-// player.usePotion()
-// player.dodge([5, 6, 10, 7,])
-// player.declareAttack('bob', 'dodge');
