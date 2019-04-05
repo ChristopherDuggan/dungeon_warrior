@@ -3,9 +3,10 @@ const domController = {
   main: document.createElement('main'),
   buttonBox: document.createElement('div'),
   textDisplay: document.createElement('div'),
+  overlay: document.createElement('div'),
   mode:'start',
   buttons: true,
-//MAKE ESCAPE MODE
+
 
   'combatButtonArr': ['inventory','attack', 'dodge', 'block', 'run'],
   'mapButtonArr': ['inventory','up', 'down','left','right'],
@@ -34,12 +35,12 @@ const domController = {
     this.textDisplay.style.border = 'solid grey 5px'
     this.textDisplay.style.color = '#ddd';
     this.textDisplay.style.overflow = 'auto ';
-    this.textDisplay.style.background = 'url("images/winners.jpg")';
-    this.textDisplay.style.backgroundSize = 'contain';
-    this.textDisplay.style.backgroundRepeat = 'no-repeat';
-    this.textDisplay.style.backgroundPosition = 'center';
     this.textDisplay.id = 'textDisplay';
     this.body.appendChild(this.textDisplay);
+  },
+  setOverlay() {
+    this.overlay.className = 'overlay';
+    this.textDisplay.appendChild(this.overlay)
   },
   makeButtons(arr) {
     this.buttonBox.innerHTML = '';
@@ -125,6 +126,7 @@ const domController = {
     this.setTextDisplay()
     this.makeButtons(this.startButtonArr)
     this.addListeners()
+    this.setOverlay()
   },
   updateTextDisplay(info) {
     newTag = document.createElement('div');

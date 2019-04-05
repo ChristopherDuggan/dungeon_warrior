@@ -19,7 +19,7 @@ main {
   align-items: center;
 }
 main p {
-  animation: 5s linear scroll-up;
+  animation: 3s linear scroll-up;
 }
 button {
   height: 30px;
@@ -30,7 +30,10 @@ ul {
   list-style: none;
 }
 li {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+}
+li button {
+  height: 20px;
 }
 p {
   text-transform: uppercase;
@@ -38,14 +41,35 @@ p {
 .hidden {
   display: none;
 }
+.overlay{
+  background-image: url("images/winners.jpg");
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100%;
+  width: 100%;
+  opacity: 1;
+  animation: hide 5s forwards;
+}
 #buttonBox {
   display: flex;
   justify-content: space-around;
 }
-#textDisplay::-webkit-scrollbar {
-  width: 0;
-}
+@keyframes hide {
+  70% {
+    opacity: 1;
+  }
+  99%{
+    opacity: 0;
+    height: 100%;
+    width: 100%;
+  }
+  100% {
+    height: 0;
+    width: 0;
+  }
 
+}
 @keyframes scroll-up {
   0% {
     transform: translateY(500%);
