@@ -11,6 +11,13 @@ const game = {
     }
     return d10Arr;
   },
+  checkWinner() {
+    if(player.currentHp <= 0) {
+      domController.changeMode('lose');
+    } if (bob.currentHp <= 0) {
+      domController.changeMode('win');
+    }
+  },
   adjustRoll(rollArr) {
     rollArr.sort(function(a,b){
         return a - b;
@@ -48,17 +55,21 @@ const game = {
   },
   checkSucessses(arr) {return arr.filter(num => num > 5).length},
   checkOpposed(offenseCount, defenseCount) {return offenseCount-defenseCount},
-  checkDead(target) {
+  checkKilled(target) {
     if (target.currentHp <= 0) {
     console.log(`${target.name} is d - e - d dead!`)
-    game.actionQueue = [];
-    game.defenseQueue = [];
-    domController.changeMode('start')
+    game.checkWinner()
     return;
     }
   },
+  tacticsPointer(string) {return tacticsBox[string]},
+  baddieAction(character, tactics) {
+    pointer = tactics
+    tacticsBox[`${pointer}`].call(character)
+  },
   runActionQueue() {
     while(game.actionQueue.length > 0) {
+      if(domController.buttons === false) {domController.toggleButtons();}
       let netSuccesses = 0;
       let currentAction = game.actionQueue[0];
       let actionId = currentAction[0];
@@ -72,18 +83,15 @@ const game = {
           if(game.checkBotch(actionRoll)) {
             console.log(`${actionDoer.name} hurt themself and took 5 damage`)
             actionDoer.currentHp -= 5
+            game.checkWinner();
             game.actionQueue.shift();
+
           } else if (game.defenseQueue.find(obj => obj.includes('dodge ' + actionTarget.name))) {
             let defenseArr = game.defenseQueue[game.defenseQueue.findIndex(obj => obj.includes('dodge ' + actionTarget.name))][1];
             netSuccesses = game.checkSucessses(actionRoll) - game.checkSucessses(defenseArr);
           } else {
             netSuccesses = game.checkSucessses(actionRoll)
           }
-
-  //         if(game.defenseQueue.find(obj => obj.includes('block ' + actionTarget.name))) {
-  // console.log('there is a block')
-  //         }
-
           if (netSuccesses > 1) {
             console.log(`There were ${netSuccesses} total successes. It was a solid hit!`)
             if(game.defenseQueue.find(obj => obj.includes('block ' + actionTarget.name))) {
@@ -94,7 +102,7 @@ const game = {
             if (finalDamage < 0) {finalDamage = 0}
             actionTarget.currentHp -= finalDamage;
             console.log(`${actionDoer.name} did ${finalDamage} damage to ${actionTarget.name}. ${actionTarget.name} has ${actionTarget.currentHp} hp left.`)
-            game.checkDead(actionTarget)
+            game.checkWinner();
             game.actionQueue.shift();
           } else if (netSuccesses === 1) {
             console.log(`There was ${netSuccesses} total success. The attack hits!`)
@@ -106,16 +114,17 @@ const game = {
             if (finalDamage < 0) {finalDamage = 0}
             actionTarget.currentHp -= finalDamage;
             console.log(`${actionDoer.name} did ${finalDamage} damage to ${actionTarget.name}. ${actionTarget.name} has ${actionTarget.currentHp} hp left.`)
-            game.checkDead(actionTarget)
+            game.checkWinner();
             game.actionQueue.shift();
           } else {
             console.log(`There were 0 total successes. The attack missed.`)
-            game.checkDead(actionTarget)
+            game.checkWinner();
             game.actionQueue.shift();
             console.log(game.actionQueue)
           }
         } else {
           console.log(`${actionTarget.name} is already down!`)
+          game.checkWinner();
           game.actionQueue.shift()
         }
       } else if (actionId.includes('select')) {
@@ -136,10 +145,7 @@ const game = {
       } else {
         if(actionDoer.run()) {
           console.log('they ran away')
-          game.actionQueue.shift();
-          game.actionQueue = [];
-          game.defenseQueue = [];
-          domController.changeMode('start')
+          domController.changeMode('escape')
           return;
         } else {
           console.log('they didn\'t run away')
@@ -147,5 +153,5 @@ const game = {
         }
       }
     }
-  },
+  }
 }

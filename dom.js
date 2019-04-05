@@ -3,34 +3,41 @@ const domController = {
   main: document.createElement('main'),
   buttonBox: document.createElement('div'),
   textDisplay: document.createElement('div'),
-  mode:'combat',
+  mode:'start',
   buttons: true,
-
+//MAKE ESCAPE MODE
 
   'combatButtonArr': ['inventory','attack', 'dodge', 'block', 'run'],
   'mapButtonArr': ['inventory','up', 'down','left','right'],
-  'startButtonArr': ['weenie', 'chumpo','tuff tim','MeanMug', 'THE BRUTALIZER'],
+  'startButtonArr': ['start'],
 
   setMain() {
-    this.main.style.height = '50px';
-    this.main.style.width = '500px';
-    this.main.style.backgroundColor = 'grey';
+    this.main.style.height = '300px';
+    this.main.style.width = '800px';
+    this.main.style.border = 'solid grey 5px'
+    this.main.innerHTML =
+    `<p>also known as duggan warrior...<br><br><br>
+    or christopher dungeon...<br><br><br>
+    once you select your opponent, it's kill...<br><br><br>
+    ...or be killed</p>`;
     this.body.appendChild(this.main);
   },
   setButtonBox() {
-    this.buttonBox.style.height = '25px';
-    this.buttonBox.style.width = '500px';
-    this.buttonBox.style.backgroundColor = 'green';
+    this.buttonBox.style.height = '40px';
+    this.buttonBox.style.width = '800px';
     this.buttonBox.id = 'buttonBox';
     this.body.appendChild(this.buttonBox);
   },
   setTextDisplay() {
-    this.textDisplay.style.width = '500px';
-    this.textDisplay.style.height = '300px';
-    this.textDisplay.style.backgroundColor = 'black';
+    this.textDisplay.style.width = '800px';
+    this.textDisplay.style.height = '400px';
+    this.textDisplay.style.border = 'solid grey 5px'
     this.textDisplay.style.color = '#ddd';
-    this.textDisplay.style.fontSize = '20px';
-    this.textDisplay.style.overflow = 'scroll';
+    this.textDisplay.style.overflow = 'auto ';
+    this.textDisplay.style.background = 'url("images/winners.jpg")';
+    this.textDisplay.style.backgroundSize = 'contain';
+    this.textDisplay.style.backgroundRepeat = 'no-repeat';
+    this.textDisplay.style.backgroundPosition = 'center';
     this.textDisplay.id = 'textDisplay';
     this.body.appendChild(this.textDisplay);
   },
@@ -45,7 +52,6 @@ const domController = {
     }
   },
   domAction(choice) {
-    console.log(`perform the ${choice} action`)
     if(choice.includes('select'))  {
       player.selectItem(choice);
       this.textDisplay.innerHTML = '';
@@ -61,11 +67,13 @@ const domController = {
       player.declare(player.run(), 'run ')
     } else if (choice.includes('block')) {
       player.declare(player.block(), 'block ')
+    } else if (choice.includes('start')) {
+      domController.changeMode('combat')
     }
+
   },
   addListeners() {
     domController.body.addEventListener('click', e => {
-      console.log(e.target)
       if (e.target.classList.contains('button')) {
         console.log(e.target.id);
         domController.domAction(e.target.id)
@@ -78,7 +86,6 @@ const domController = {
       if (e.ctrlKey || e.altKey || e.metaKey || e.shiftKey) {
         return;
       }
-      console.log(e.code)
       switch(e.code) {
         case 'Digit1':
           domController.domAction('inventory')
@@ -116,15 +123,48 @@ const domController = {
     this.setMain()
     this.setButtonBox()
     this.setTextDisplay()
-    this.makeButtons(this.combatButtonArr)
+    this.makeButtons(this.startButtonArr)
     this.addListeners()
   },
   updateTextDisplay(info) {
-    this.textDisplay.innerHTML = info
+    newTag = document.createElement('div');
+    newTag.innerHTML = info;
+    this.textDisplay.prepend(newTag)
   },
   changeMode(newMode) {
     this.mode = newMode;
     this.makeButtons(this[`${newMode}ButtonArr`])
+
+    // combat, start, win, lose, escape
+    if(this.mode === 'start' ) {
+      this.main.innerHTML =
+      `<p>also known as duggan warrior...
+      or christopher dungeon...
+      once you start, it's kill...
+      ...or be killed</p>`;
+    }
+    if(this.mode === 'combat' ) {
+      this.main.innerHTML =
+      `<div id="playerDiv">
+      <h4>${player.name}</h4>
+        <img src ="images/playerReady.png">\
+        <h4>${player.currentHp} hp</h4>
+      </div>
+      <div id="baddieDiv">
+        <h4>${bob.name}</h4>
+        <img src ="images/bobReady.png">
+        <h4>${bob.currentHp} hp</h4>
+      </div>`
+    }
+    if(this.mode === 'win') {
+
+    }
+    if(this.mode === 'lose') {
+
+    }
+    if(this.mode === 'escape' ) {
+
+    }
   },
   closeInventory() {
     domController.updateTextDisplay('')

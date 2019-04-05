@@ -27,10 +27,10 @@ class Character {
   showInventory() {
     let textChunk = `<button class="button" id="closeInventory">CLOSE</button>`;
     let list = (itemArr) => {
-      textChunk += `<ul><h4>${itemArr[0].type.toUpperCase()} LIST:</h4>`
+      textChunk += `<ul><h3>${itemArr[0].type.toUpperCase()} LIST:</h3>`
       for(let i = 0; i < itemArr.length; i++) {
         textChunk+=
-`<li><button class="button" id="select ${itemArr[i].name}">SELECT</button> NAME: ${itemArr[i].name} ${Object.keys(itemArr[i])[2].toUpperCase()}: ${Object.values(itemArr[i])[2]}</li>`
+`<li><button class="button" id="select ${itemArr[i].name}">SELECT</button> NAME: ${itemArr[i].name}</li> <li>${Object.keys(itemArr[i])[2].toUpperCase()}: ${Object.values(itemArr[i])[2]}</li>`
       }
       textChunk += `</ul>`
     }
@@ -64,14 +64,24 @@ class Character {
       game.defenseQueue.push([actionId, action]);
       this.declaredActionCount ++;
       if(this.declaredActionCount >= this.actionsPerTurn) {
-        domController.toggleButtons();
+        if(this.constructor === Player) {
+          domController.toggleButtons();
+          game.baddieAction(bob, bob.tactics);
+        } else {
+          game.runActionQueue();
+        }
       }
       return;
     } else {
       game.actionQueue.push([actionId, action, target])
       this.declaredActionCount ++;
       if(this.declaredActionCount >= this.actionsPerTurn) {
-        domController.toggleButtons();
+        if(this.constructor === Player) {
+          domController.toggleButtons();
+          game.baddieAction(bob, bob.tactics);
+        } else {
+          game.runActionQueue();
+        }
       }
       return;
     }
@@ -160,11 +170,11 @@ class Baddie extends Character {
   }
 }
 
-let bob = new Baddie (1,
-  {strength: 1, agility: 1, toughness: 1},
-  {attack: 1, block: 1, dodge: 1},
+let bob = new Baddie (3,
+  {strength: 3, agility: 3, toughness: 3},
+  {attack: 3, block: 3, dodge: 3},
   [
-    {type: 'weapon', name: 'stick', damage: 1},
-    {type: 'armor', name: 'Helm of the Wizard', soak: 2},
+    {type: 'weapon', name: 'Fist_of_Heaven', damage: 10},
+    {type: 'armor', name: 'Big_Noggin', soak: 2},
     {type: 'health potion', name: 'Small_Health_Potion', heal: '+9hp', size: 'SM'}
   ]);

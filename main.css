@@ -1,3 +1,56 @@
+* {
+  box-sizing: border-box;
+  font-family: 'Press Start 2P', cursive;
+  color: #ddd;
+}
+body {
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 10px;
+}
+main {
+  text-align: center;
+  vertical-align: middle;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+main p {
+  animation: 5s linear scroll-up;
+}
+button {
+  height: 30px;
+  color: black;
+  text-align: right;
+}
+ul {
+  list-style: none;
+}
+li {
+  margin-bottom: 10px;
+}
+p {
+  text-transform: uppercase;
+}
 .hidden {
   display: none;
+}
+#buttonBox {
+  display: flex;
+  justify-content: space-around;
+}
+#textDisplay::-webkit-scrollbar {
+  width: 0;
+}
+
+@keyframes scroll-up {
+  0% {
+    transform: translateY(500%);
+  }
+  100% {
+    transform: translateY(0);
+  }
 }
